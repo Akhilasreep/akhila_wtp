@@ -3,70 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample HTML Layout</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 70;
-            padding: 50;
-            background-color: aqua;
-        }
-
-        header {
-            background-color: pink;
-            color: blueviolet;
-            padding: 10px;
-            text-align: center;
-        }
-
-        nav {
-            background-color:blueviolet;
-            color: blanchedalmond;
-            padding: ;
-            text-align: center;
-        }
-
-        nav a {
-            color:lightgrey;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        section {
-            padding: 50px;
-        }
-
-        footer {
-            background-color:violet;            color: lightcyan;
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            bottom:2PX;
-            width: 100%;
-        }
-    </style>
+    <title>PAGE TURNERS - Explore Books</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header>
-    <i><h1>HEADER</h1></i>
-</header>
+    <!-- User Registration Form (Always shown when opening the website) -->
+    <div id="registerSection">
+        <h2>Register User</h2>
+        <form id="registerForm">
+            <label>Name:</label>
+            <input type="text" id="name" required><br>
 
-<nav>
-    <a href="#"><h1>HOME</a></h1>
-    <a href="#"><h1>ABOUT</a></h1>
-    <a href="#"><h1>CONTACT</a></h1>
-</nav>
+            <label>College Name:</label>
+            <input type="text" id="collegeName" required><br>
 
-<section>
-    <h2>Main Content Area</h2>
-    <p>This is the main content of your page.</p>
-</section>
+            <label>Phone:</label>
+            <input type="text" id="phone" required><br>
 
-<footer>
-    <p>Footer</p>
-    <img scr href="center" width="30%" hight="20%";
-</footer>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Home Page (Initially hidden, shown after registration) -->
+    <main id="mainContent" style="display: none;">
+        <h1>📚 PAGE TURNERS - Explore Books</h1>
+        <div id="bookList"></div>
+    </main>
+
+    <!-- Bottom Navigation Bar (Initially hidden, shown after registration) -->
+    <div class="bottom-nav" style="display: none;">
+        <ul>
+            <li><a href="#" onclick="navigateTo('home')" id="homeTab">🏠 Home</a></li>
+            <li><a href="#" onclick="navigateTo('cart')" id="cartTab">🛒 Cart</a></li>
+            <li><a href="#" onclick="navigateTo('orders')" id="ordersTab">📦 Sell Now</a></li>
+            <li><a href="#" onclick="navigateTo('account')" id="accountTab">👤 Account</a></li>
+        </ul>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const collegeName = document.getElementById("collegeName").value;
+            const phone = document.getElementById("phone").value;
+
+            fetch("http://localhost/MyProject/register.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: name, collegeName: collegeName, phone: phone })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+
+                // Show website content and hide registration form
+                showWebsiteContent();
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        function showWebsiteContent() {
+            document.getElementById("registerSection").style.display = "none"; // Hide registration form
+            document.getElementById("mainContent").style.display = "block"; // Show website content
+            document.querySelector(".bottom-nav").style.display = "block"; // Show navigation bar
+        }
+    </script>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
